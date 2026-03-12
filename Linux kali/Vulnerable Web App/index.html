@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Identity v2.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, #e0e7ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 48px 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid var(--gray-100);
+        }
+
+        .header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--gray-900);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--gray-400);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 10px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        input::placeholder {
+            color: var(--gray-400);
+        }
+
+        input:hover {
+            background: white;
+            border-color: var(--gray-300);
+        }
+
+        input:focus {
+            outline: none;
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .btn-clear:hover {
+            background: var(--gray-300);
+            box-shadow: none;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 28px 0;
+        }
+
+        #result {
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+            line-height: 1.6;
+            border-left: 4px solid var(--primary);
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            color: var(--gray-900);
+            animation: slideIn 0.3s ease;
+        }
+
+        #result.error {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .response-label {
+            font-size: 12px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>Identity Manager</h1>
+            <p class="subtitle">Enterprise Profile System</p>
+        </div>
+
+        <div class="form-group">
+            <label for="nameInput">Full Name</label>
+            <input
+                type="text"
+                id="nameInput"
+                placeholder="John Doe"
+                onkeypress="handleKeyPress(event)"
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="button-group">
+            <button onclick="updateProfile()">Update Profile</button>
+            <button class="btn-clear" onclick="clearForm()">Clear</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div id="result">
+            <span class="response-label">Profile Response</span>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        async function updateProfile() {
+            const name = document.getElementById('nameInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+
+            if (!name) {
+                resultContent.innerHTML = '⚠️ Please enter a name';
+                resultDiv.style.display = 'block';
+                resultDiv.classList.add('error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/greet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name })
+                });
+
+                const data = await response.json();
+                resultDiv.style.display = 'block';
+                resultDiv.classList.remove('error');
+                // จุดอ่อนสำคัญ: ใช้ .innerHTML แทน .textContent - XSS Vulnerability
+                resultContent.innerHTML = data.message;
+            } catch (err) {
+                resultContent.innerHTML = '❌ Connection Error: ' + err.message;
+                resultDiv.style.display = 'block';
+                resultDiv.classList.add('error');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('nameInput').value = '';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('nameInput').focus();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                updateProfile();
+            }
+        }
+    </script>
+</body>
+</html>
