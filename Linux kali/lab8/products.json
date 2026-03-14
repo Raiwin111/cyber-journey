@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Laptop Computer",
+    "price": 25000,
+    "quantity": 1000000,
+    "description": "High performance laptop"
+  },
+  {
+    "id": 2,
+    "name": "Wireless Mouse",
+    "price": 500,
+    "quantity": 5000000,
+    "description": "Ergonomic wireless mouse"
+  },
+  {
+    "id": 3,
+    "name": "USB-C Cable",
+    "price": 300,
+    "quantity": 999999999,
+    "description": "Fast charging USB-C cable"
+  }
+]

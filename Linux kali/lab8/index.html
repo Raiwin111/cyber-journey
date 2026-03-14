@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+            --green: #10b981;
+            --red: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, #e0e7ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 48px 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid var(--gray-100);
+        }
+
+        .header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--gray-900);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--gray-400);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        input::placeholder {
+            color: var(--gray-400);
+        }
+
+        input:hover {
+            background: white;
+            border-color: var(--gray-300);
+        }
+
+        input:focus {
+            outline: none;
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            display: none;
+            border-left: 4px solid;
+        }
+
+        .alert.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left-color: var(--green);
+        }
+
+        .alert.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left-color: var(--red);
+        }
+
+        .demo-info {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+
+        .demo-info p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-info strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>🛍️ Online Store</h1>
+            <p class="subtitle">Welcome - Please Login</p>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <div class="demo-info">
+            <p><strong>Demo Accounts:</strong></p>
+            <p>👤 User: <code>user</code> / <code>user123</code></p>
+            <p>👨‍💼 Admin: <code>admin</code> / <code>admin123</code></p>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                placeholder="user or admin"
+                onkeypress="handleKeyPress(event)"
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="••••••••"
+                onkeypress="handleKeyPress(event)"
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="button-group">
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const alert = document.getElementById('alert');
+
+            if (!username || !password) {
+                showAlert('Please enter username and password', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/products';
+                    }, 500);
+                } else {
+                    showAlert(data.message || 'Login failed', 'error');
+                }
+            } catch (err) {
+                showAlert('Connection error: ' + err.message, 'error');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = 'alert ' + type;
+            alert.style.display = 'block';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        }
+
+        // Focus on username input when page loads
+        document.getElementById('username').focus();
+    </script>
+</body>
+</html>

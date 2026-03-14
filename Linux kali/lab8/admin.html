@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+            --green: #10b981;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: var(--gray-50);
+            min-height: 100vh;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-badge {
+            background: var(--yellow);
+            color: #78350f;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            display: none;
+            border-left: 4px solid;
+        }
+
+        .alert.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left-color: var(--green);
+        }
+
+        .alert.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left-color: var(--red);
+        }
+
+        .alert.info {
+            background: #eff6ff;
+            color: #0c4a6e;
+            border-left-color: var(--primary);
+        }
+
+        .products-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--gray-100);
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-900);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .quantity-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity-input {
+            width: 100px;
+            padding: 8px 12px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-update {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-update:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-update:active {
+            transform: scale(0.98);
+        }
+
+        .price-cell {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .status-cell {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .status-in-stock {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .status-low {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-out {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-600);
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-600);
+            background: white;
+            border-radius: 12px;
+        }
+
+        .add-product-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-add-product {
+            padding: 10px 20px;
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-add-product:hover {
+            background: #059669;
+        }
+
+        @media (max-width: 768px) {
+            .quantity-input-group {
+                flex-direction: column;
+            }
+
+            .quantity-input {
+                width: 100%;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">👨‍💼 Admin Panel</div>
+            <div class="user-info">
+                <span class="user-badge">ADMIN</span>
+                <a href="/products" class="btn-back">← Back to Shop</a>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">📊 Product Management</h1>
+        <p class="page-subtitle">Manage product inventory and quantities</p>
+
+        <div id="alert" class="alert"></div>
+
+        <div class="add-product-section">
+            <div class="add-product-title">➕ Add New Product</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" id="newProductName" class="form-input" placeholder="Enter product name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price (฿)</label>
+                    <input type="number" id="newProductPrice" class="form-input" placeholder="Enter price" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" id="newProductQuantity" class="form-input" placeholder="Enter quantity" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" id="newProductDesc" class="form-input" placeholder="Enter description">
+                </div>
+            </div>
+            <button class="btn-add-product" onclick="addNewProduct()">🛍️ Add Product</button>
+        </div>
+
+        <div class="products-table">
+            <div id="loading" class="loading">Loading products...</div>
+            <table id="productsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Current Quantity</th>
+                        <th>Status</th>
+                        <th>Update Quantity</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="noProducts" class="no-products" style="display: none;">
+                No products found.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function initPage() {
+            try {
+                // Check if user is admin
+                const userResponse = await fetch('/api/user');
+                if (!userResponse.ok) {
+                    window.location.href = '/';
+                    return;
+                }
+                const userData = await userResponse.json();
+                if (!userData.is_admin) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                // Load products
+                await loadProducts();
+            } catch (err) {
+                showAlert('Error loading page: ' + err.message, 'error');
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    displayProducts(data.products);
+                } else {
+                    showAlert('Error loading products', 'error');
+                }
+            } catch (err) {
+                showAlert('Connection error: ' + err.message, 'error');
+            }
+        }
+
+        function displayProducts(products) {
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('productsTable');
+            const tableBody = document.getElementById('tableBody');
+            const noProducts = document.getElementById('noProducts');
+
+            loading.style.display = 'none';
+
+            if (products.length === 0) {
+                noProducts.style.display = 'block';
+                table.style.display = 'none';
+                return;
+            }
+
+            tableBody.innerHTML = '';
+            products.forEach(product => {
+                const row = createTableRow(product);
+                tableBody.appendChild(row);
+            });
+
+            table.style.display = 'table';
+            noProducts.style.display = 'none';
+        }
+
+        function createTableRow(product) {
+            const row = document.createElement('tr');
+            const quantity = product.quantity;
+
+            let statusBadge = '<span class="status-badge status-in-stock">✓ In Stock</span>';
+            if (quantity === 0) {
+                statusBadge = '<span class="status-badge status-out">✗ Out of Stock</span>';
+            } else if (quantity < 3) {
+                statusBadge = '<span class="status-badge status-low">⚠ Low Stock</span>';
+            }
+
+            row.innerHTML = `
+                <td>
+                    <div class="product-info">
+                        <span class="product-name">${product.name}</span>
+                        <span class="product-desc">${product.description}</span>
+                    </div>
+                </td>
+                <td>
+                    <span class="price-cell">฿${product.price.toLocaleString()}</span>
+                </td>
+                <td>
+                    <strong>${quantity}</strong> units
+                </td>
+                <td>
+                    <div class="status-cell">
+                        ${statusBadge}
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-input-group">
+                        <input type="number" class="quantity-input" id="qty-${product.id}" value="${quantity}" min="0">
+                        <button class="btn-update" onclick="updateQuantity(${product.id})">Update</button>
+                    </div>
+                </td>
+            `;
+
+            return row;
+        }
+
+        async function updateQuantity(productId) {
+            const input = document.getElementById(`qty-${productId}`);
+            const newQuantity = parseInt(input.value);
+
+            if (isNaN(newQuantity) || newQuantity < 0) {
+                showAlert('Please enter a valid quantity', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/products/${productId}/quantity`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quantity: newQuantity })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert(`✅ ${data.message}`, 'success');
+                    await loadProducts();
+                } else {
+                    showAlert(data.message || 'Error updating quantity', 'error');
+                }
+            } catch (err) {
+                showAlert('Connection error: ' + err.message, 'error');
+            }
+        }
+
+        async function addNewProduct() {
+            const name = document.getElementById('newProductName').value.trim();
+            const price = parseFloat(document.getElementById('newProductPrice').value);
+            const quantity = parseInt(document.getElementById('newProductQuantity').value);
+            const description = document.getElementById('newProductDesc').value.trim();
+
+            if (!name || isNaN(price) || isNaN(quantity)) {
+                showAlert('Please fill in all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, price, quantity, description })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('✅ Product added successfully!', 'success');
+                    document.getElementById('newProductName').value = '';
+                    document.getElementById('newProductPrice').value = '';
+                    document.getElementById('newProductQuantity').value = '';
+                    document.getElementById('newProductDesc').value = '';
+                    await loadProducts();
+                } else {
+                    showAlert(data.message || 'Error adding product', 'error');
+                }
+            } catch (err) {
+                showAlert('Connection error: ' + err.message, 'error');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = 'alert ' + type;
+            alert.style.display = 'block';
+
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 4000);
+        }
+
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/';
+            } catch (err) {
+                console.error('Logout error:', err);
+                window.location.href = '/';
+            }
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initPage);
+    </script>
+</body>
+</html>
